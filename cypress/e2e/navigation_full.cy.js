@@ -147,6 +147,35 @@ describe('Navigation: full coverage', () => {
   it('EN language switch visible', () => {
     cy.contains('a,button', /^EN$/).should('be.visible');
   });
+
+  it('header region exposes navigation landmark and logo link', () => {
+    cy.get('header,[role=\"banner\"]').within(() => {
+      cy.get('nav,[role=\"navigation\"]').should('exist');
+      cy.get('a[href=\"/\"]').first().should('exist');
+    });
+  });
+
+  it('open “Ko darīt, ja..?” page and verify headings', () => {
+    cy.get('nav').contains('a', /Ko darīt/i).click();
+    cy.get('h1,h2').its('length').should('be.greaterThan', 0);
+    cy.go('back');
+  });
+
+  it('open “Par portālu” and verify footer is still present', () => {
+    cy.get('nav').contains('a', /Par portālu/i).click();
+    cy.get('footer').should('exist');
+    cy.go('back');
+  });
+
+  it('switch to EN and ensure header still contains nav', () => {
+    cy.contains('a,button', /^EN$/).click({ force: true });
+    cy.get('header').find('nav').should('exist');
+    cy.contains('a,button', /^LV$/).click({ force: true });
+  });
+
+  it('verify top nav item count above threshold', () => {
+    cy.get('nav a:visible').its('length').should('be.greaterThan', 5);
+  });
 });
 
 
