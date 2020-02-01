@@ -145,6 +145,27 @@ describe('Services: consolidated', () => {
     cy.contains('a', /Pakalpojumi/i).click();
     cy.get('a:visible').its('length').should('be.greaterThan', 20);
   });
+
+  it('drill into “Dzīvesvietas deklarēšana” and return', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.contains('a', /Dzīvesvietas deklarēšana/i).first().click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('drill into “Parakstu vākšana” and return', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.contains('a', /Parakstu vākšana/i).first().click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('open “Informācija par prognozēto pensiju” and return', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.contains('a', /prognozēto pensiju/i).first().click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
 });
 
 
