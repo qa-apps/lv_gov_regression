@@ -16,7 +16,7 @@ def _to_bool(value: Optional[str], default: bool = True) -> bool:
 @pytest.fixture(scope="session")
 def base_url() -> str:
     load_dotenv()
-    return os.getenv("BASE_URL", "https://latvian.gov.lv")
+    return os.getenv("BASE_URL", "https://latvija.gov.lv")
 
 
 @pytest.fixture(scope="session")

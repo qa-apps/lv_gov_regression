@@ -1,7 +1,7 @@
 lv_gov_regression
 ==================
 
-End‑to‑end QA automation in Python using Playwright + pytest for the public website `latvian.gov.lv`.
+End‑to‑end QA automation in Python using Playwright + pytest for the public website `latvija.gov.lv`.
 
 What this repo provides:
 
