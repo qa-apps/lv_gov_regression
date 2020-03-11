@@ -146,6 +146,20 @@ describe('Search: consolidated suite', () => {
     cy.contains('button', /Aizvērt meklētāju/i).click({ force: true });
     cy.contains('button', /Aizvērt meklētāju/i).should('not.exist');
   });
+
+  it('fast repeated searches do not break UI', () => {
+    cy.contains('button', /Mekl/).click();
+    const terms = ['pensija', 'nodoklis', 'pabalsts', 'e-adrese', 'deklarācija'];
+    terms.forEach((t) => cy.get('input[type=\"search\"], [role=\"searchbox\"]').clear().type(`${t}{enter}`));
+    cy.contains(/rezult|meklēšan/i).should('exist');
+  });
+
+  it('search supports uppercase/lowercase equivalence', () => {
+    ['PENSIJA', 'pensieJa', 'PensIjA'].forEach((q) => {
+      home.search(q);
+      cy.contains(/pensij/i).should('exist');
+    });
+  });
 });
 
 
