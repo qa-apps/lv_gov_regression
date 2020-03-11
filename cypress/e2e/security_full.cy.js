@@ -146,6 +146,22 @@ describe('Security: consolidated', () => {
       }
     });
   });
+
+  it('x-content-security-policy legacy header noted if present', () => {
+    cy.request('/').then((resp) => {
+      const xCsp = resp.headers['x-content-security-policy'];
+      if (xCsp) {
+        expect(xCsp.length).to.be.greaterThan(0);
+      }
+    });
+  });
+
+  it('no mixed content (http) asset references in HTML', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).not.to.match(/src=\\\"http:\\/\\//i);
+      expect(resp.body).not.to.match(/link[^>]+href=\\\"http:\\/\\//i);
+    });
+  });
 });
 
 
