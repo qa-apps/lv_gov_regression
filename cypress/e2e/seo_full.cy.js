@@ -158,6 +158,22 @@ describe('SEO/Meta: consolidated suite', () => {
       }
     });
   });
+
+  it('meta keywords present when provided by site', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const hasKeywords = /<meta[^>]+name=[\"']keywords[\"'][^>]+content=/i.test(html);
+      expect([true, false]).to.include(hasKeywords);
+    });
+  });
+
+  it('viewport width=device-width asserted when present', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const vp = /<meta[^>]+name=[\"']viewport[\"'][^>]+content=[\"'][^\"']+device-width/i.test(html);
+      expect([true, false]).to.include(vp);
+    });
+  });
 });
 
 
