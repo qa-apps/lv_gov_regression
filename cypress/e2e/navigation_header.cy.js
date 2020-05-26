@@ -36,6 +36,12 @@ describe('Navigation: header links', () => {
   it('user entry link visible', () => {
     cy.contains('a', /Ienākt Mana Latvija.lv/i).should('be.visible');
   });
+
+  it('E-adrese link leads to section', () => {
+    cy.contains('a', /^E-adrese$/).click();
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
 });
 
 

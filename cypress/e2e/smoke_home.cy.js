@@ -73,6 +73,16 @@ describe('Smoke: Home page', () => {
   it('basic accessibility check on hero', () => {
     cy.checkA11yBlock('main');
   });
+
+  it('CTA “Rakstīt e-adresē” visible and navigable', () => {
+    cy.contains('a', /Rakstīt e-adresē/i).should('be.visible').click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('Top services block contains at least 3 items', () => {
+    cy.contains('h2', /Visi pakalpojumi/i).parentsUntil('main').find('a').its('length').should('be.greaterThan', 2);
+  });
 });
 
 
