@@ -75,6 +75,40 @@ describe('Search: consolidated suite', () => {
     home.search('x'.repeat(200));
     cy.contains(/Lai uzsāktu meklēšanu|rezult/i).should('exist');
   });
+
+  it('suggestions list appears when supported', () => {
+    cy.contains('button', /Mekl/).click();
+    home.search('pen');
+    cy.get('ul, [role=\"listbox\"], .suggestions').then(($el) => {
+      const count = $el.find('li, [role=\"option\"], a').length;
+      expect(count).to.be.greaterThan(0);
+    });
+  });
+
+  it('escape key closes the search overlay if open', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.get('input[type=\"search\"], [role=\"searchbox\"]').type('{esc}');
+    cy.contains('button', /Aizvērt meklētāju/i).should('not.exist');
+  });
+
+  it('keyboard Enter triggers search when field focused', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.get('input[type=\"search\"], [role=\"searchbox\"]').focus().type('pensija{enter}');
+    cy.contains('a, h3, h2', /pensij/i).should('be.visible');
+  });
+
+  it('handles quotes and special characters', () => {
+    const queries = ['\"pensija\"', \"(pabalsts)\", \"nodokļa?\", \"#e-adrese\"];
+    queries.forEach((q) => {
+      home.search(q);
+      cy.contains(/rezult|meklēšan/i).should('exist');
+    });
+  });
+
+  it('result links have hrefs', () => {
+    home.search('pensija');
+    cy.get('a:visible').filter((_, a) => !!Cypress.$(a).attr('href')).its('length').should('be.greaterThan', 0);
+  });
 });
 
 
