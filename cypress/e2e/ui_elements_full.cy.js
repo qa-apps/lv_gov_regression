@@ -139,6 +139,17 @@ describe('UI elements: consolidated coverage', () => {
       });
     });
   });
+
+  it('sitemap link and attention block visible', () => {
+    cy.contains('a', /lapas karti/i).should('exist');
+    cy.contains(/Pievērs uzmanību!/i).should('be.visible');
+  });
+
+  it('policy pages are linked from footer', () => {
+    ['Privātuma politika', 'Sīkdatņu politika', 'Lietošanas noteikumi'].forEach((t) => {
+      cy.get('footer').contains('a', new RegExp(t, 'i')).should('exist');
+    });
+  });
 });
 
 
