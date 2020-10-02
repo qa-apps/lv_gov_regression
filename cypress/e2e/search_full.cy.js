@@ -109,6 +109,30 @@ describe('Search: consolidated suite', () => {
     home.search('pensija');
     cy.get('a:visible').filter((_, a) => !!Cypress.$(a).attr('href')).its('length').should('be.greaterThan', 0);
   });
+
+  it('result titles contain the query in some form for common terms', () => {
+    ['pensija', 'pabalsts'].forEach((q) => {
+      home.search(q);
+      cy.contains('a, h3, h2', new RegExp(q.slice(0, 4), 'i')).should('exist');
+    });
+  });
+
+  it('search box placeholder exists', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.get('input[type=\"search\"]').invoke('attr', 'placeholder').then((ph) => {
+      expect(ph).to.be.a('string');
+    });
+  });
+
+  it('search input is focusable', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.get('input[type=\"search\"], [role=\"searchbox\"]').first().focus().should('be.focused');
+  });
+
+  it('search retains last query in the field after submission', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.get('input[type=\"search\"], [role=\"searchbox\"]').clear().type('pensija{enter}').should('have.value', /pensij/i);
+  });
 });
 
 
