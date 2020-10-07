@@ -114,6 +114,45 @@ describe('Link traversal: consolidated', () => {
       cy.go('back');
     });
   });
+
+  it('About page traversal of multiple links', () => {
+    cy.get('nav').contains('a', /Par portālu/i).click();
+    const aboutLinks = [
+      'Noderīgi',
+      'Kontakti',
+      'Aktualitātes',
+      'Statistika',
+      'Atsauksme',
+      'Privātuma politika',
+      'Sīkdatņu politika'
+    ];
+    aboutLinks.forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).click({ force: true });
+      cy.location('pathname').should('match', /./);
+      cy.go('back');
+    });
+  });
+
+  it('Sitemap navigation from footer and return', () => {
+    cy.contains('a', /lapas karti/i).click();
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('Mana Latvija.lv traversal of first 4 tiles', () => {
+    cy.get('nav').contains('a', /Mana Latvija.lv/i).click();
+    const tiles = [
+      'E-adreses pastkastīte',
+      'Sākt lietot e-adresi',
+      'Manas darbības portālā',
+      'Profila iestatījumi'
+    ];
+    tiles.forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).click({ force: true });
+      cy.location('pathname').should('match', /./);
+      cy.go('back');
+    });
+  });
 });
 
 
