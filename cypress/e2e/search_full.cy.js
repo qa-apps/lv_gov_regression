@@ -133,6 +133,13 @@ describe('Search: consolidated suite', () => {
     cy.contains('button', /Mekl/).click();
     cy.get('input[type=\"search\"], [role=\"searchbox\"]').clear().type('pensija{enter}').should('have.value', /pensij/i);
   });
+
+  it('navigates to first result and back', () => {
+    home.search('pensija');
+    cy.get('a:visible').first().click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
 });
 
 
