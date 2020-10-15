@@ -140,6 +140,12 @@ describe('Search: consolidated suite', () => {
     cy.location('pathname').should('match', /./);
     cy.go('back');
   });
+
+  it('close button hides search overlay', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.contains('button', /Aizvērt meklētāju/i).click({ force: true });
+    cy.contains('button', /Aizvērt meklētāju/i).should('not.exist');
+  });
 });
 
 
