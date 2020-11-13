@@ -135,6 +135,16 @@ describe('Services: consolidated', () => {
       });
     });
   });
+
+  it('services page contains multiple headings and sections', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.get('h1,h2,h3').its('length').should('be.greaterThan', 1);
+  });
+
+  it('services page exposes at least 20 links', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.get('a:visible').its('length').should('be.greaterThan', 20);
+  });
 });
 
 
