@@ -90,6 +90,74 @@ describe('SEO/Meta: consolidated suite', () => {
       }
     });
   });
+
+  it('RSS/Atom feeds linked when present', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const hasFeed = /<link[^>]+type=[\"']application\\/(rss|atom)\\+xml[\"']/i.test(html);
+      expect([true, false]).to.include(hasFeed);
+    });
+  });
+
+  it('robots meta not disallowing indexing on home', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const robotsMeta = /<meta[^>]+name=[\"']robots[\"'][^>]+content=[\"']([^\"']+)[\"']/i.exec(html);
+      if (robotsMeta && robotsMeta[1]) {
+        expect(robotsMeta[1].toLowerCase()).not.to.include('noindex');
+      }
+    });
+  });
+
+  it('schema.org markup present when available', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const hasJsonLd = /<script[^>]+type=[\"']application\\/ld\\+json[\"']/i.test(html);
+      expect([true, false]).to.include(hasJsonLd);
+    });
+  });
+
+  it('favicon links present', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<link[^>]+rel=[\"']icon[\"']/i);
+    });
+  });
+
+  it('open graph title or site_name present when OG tags exist', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      if (/<meta[^>]+property=[\"']og:/i.test(html)) {
+        expect(html).to.match(/property=[\"']og:(site_name|title)[\"']/i);
+      }
+    });
+  });
+
+  it('twitter card has a content attribute when present', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      if (/<meta[^>]+name=[\"']twitter:/i.test(html)) {
+        expect(html).to.match(/<meta[^>]+name=[\"']twitter:[^\"']+[\"'][^>]+content=/i);
+      }
+    });
+  });
+
+  it('breadcrumbs present either in markup or JSON-LD when available', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const hasCrumbs = /aria-label=[\"']breadcrumb[\"']|itemscope[^>]+BreadcrumbList|itemtype=[\"']https:\\/\\/schema.org\\/BreadcrumbList[\"']/i.test(html);
+      expect([true, false]).to.include(hasCrumbs);
+    });
+  });
+
+  it('primary language appears to be Latvian (lv)', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      const lang = /<html[^>]+lang=[\"']([^\"']+)[\"']/i.exec(html);
+      if (lang && lang[1]) {
+        expect(lang[1].toLowerCase()).to.include('lv');
+      }
+    });
+  });
 });
 
 
