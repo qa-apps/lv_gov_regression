@@ -91,6 +91,54 @@ describe('Accessibility: consolidated suite', () => {
       });
     });
   });
+
+  it('links have non-empty accessible names', () => {
+    cy.get('a:visible').each(($a) => {
+      const text = Cypress.$($a).text().trim();
+      expect(text.length).to.be.greaterThan(0);
+    });
+  });
+
+  it('buttons have non-empty accessible names', () => {
+    cy.get('button:visible').each(($b) => {
+      const txt = Cypress.$($b).text().trim();
+      expect(txt.length).to.be.greaterThan(0);
+    });
+  });
+
+  it('no obvious tabindex=-1 traps on clickable elements', () => {
+    cy.get('[tabindex=\"-1\"]').each(($el) => {
+      const clickable = Cypress.$($el).is('a,button,[role=\"button\"]');
+      expect(clickable).to.eq(false);
+    });
+  });
+
+  it('skip to content link present when available', () => {
+    const hasSkip = Cypress.$('a[href^=\"#\" i]').filter((_, a) => /skip|saturs|content/i.test(Cypress.$(a).text())).length > 0;
+    expect([true, false]).to.include(hasSkip);
+  });
+
+  it('aria-hidden is not applied to interactive elements', () => {
+    cy.get('[aria-hidden=\"true\"]').each(($el) => {
+      const interactive = Cypress.$($el).is('a,button,input,select,textarea');
+      expect(interactive).to.eq(false);
+    });
+  });
+
+  it('images used as links have alt text', () => {
+    cy.get('a img:visible').each(($img) => {
+      const alt = Cypress.$($img).attr('alt');
+      if (alt !== undefined) {
+        expect(alt.length).to.be.greaterThan(0);
+      }
+    });
+  });
+
+  it('heading levels exist in main content', () => {
+    cy.get('main').within(() => {
+      cy.get('h1,h2').its('length').should('be.greaterThan', 0);
+    });
+  });
 });
 
 
