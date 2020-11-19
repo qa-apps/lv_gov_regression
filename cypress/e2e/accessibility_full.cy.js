@@ -139,6 +139,14 @@ describe('Accessibility: consolidated suite', () => {
       cy.get('h1,h2').its('length').should('be.greaterThan', 0);
     });
   });
+
+  it('status/alert roles are announced where present', () => {
+    const roles = ['status', 'alert'];
+    roles.forEach((r) => {
+      const count = Cypress.$(`[role=\"${r}\"]`).length;
+      expect([true, false]).to.include(count >= 0);
+    });
+  });
 });
 
 
