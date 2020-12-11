@@ -1,53 +1,52 @@
 lv_gov_regression
 ==================
 
-End‑to‑end QA automation in Python using Playwright + pytest for the public website `latvija.gov.lv`.
+End‑to‑end QA automation using Cypress for the public website `latvija.gov.lv`.
 
 What this repo provides:
 
 - Regression, smoke, navigation, UI, accessibility and basic security checks
-- Page Object Model with typed, documented methods
-- Deterministic fixtures, retries, xdist parallelism, HTML report
+- Cypress Page Object helpers in `cypress/pages/`
+- Deterministic runs (videos off by default)
 - Config via environment variables (no secrets in code)
 
 Quick start
 -----------
 
-1) Create a virtualenv and install dependencies:
+1) Ensure Node 20 (see `.nvmrc`), then install:
 
 ```
-python3 -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
-playwright install
+nvm use
+npm ci || npm install
 ```
 
 2) Run the default suite:
 
 ```
-pytest -n auto --maxfail=1 --dist=loadscope --html=reports/report.html
+npm run cy:run
+# headed
+npm run cy:run:headed
+# interactive
+npm run cy:open
 ```
 
 3) Base configuration comes from environment:
 
-- `BASE_URL` (default: `https://latvian.gov.lv`)
-- `HEADLESS` (`1` by default)
-- `SLOWMO_MS` (default: `0`)
+- `BASE_URL` (default: `https://latvija.gov.lv`)
 
 Repository layout
 -----------------
 
-- `pages/` — Page Objects
-- `tests/` — Test modules (each ≥150 LOC)
-- `helpers/` — Utilities (env, a11y, network/security helpers)
-- `conftest.py` — Shared pytest fixtures
-- `pytest.ini` — Pytest defaults
+- `cypress/e2e/` — Test specs (each ≥150 LOC)
+- `cypress/pages/` — Page object helpers
+- `cypress/support/` — Commands and bootstrap
+- `cypress.config.js` — Cypress configuration
 
 Notes
 -----
 
-- This repository intentionally avoids committing secrets. Use a local `.env` file if needed.
-- Large test modules are grouped to stay within a capped number of files while covering many paths.
-- Commit history may be backdated for migration/testing purposes only.
+- This repository intentionally avoids committing secrets. Use environment variables locally/CI.
+- Specs are consolidated to ≤30 files with broad coverage.
+- Commit history is backdated to 2020 by request.
 
 
