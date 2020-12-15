@@ -99,6 +99,20 @@ describe('About/Policies consolidated', () => {
       cy.go('back');
     });
   });
+
+  it('footer contains contacts, about and accessibility entries', () => {
+    ['Kontakti', 'Par portālu', 'Piekļūstamības paziņojums'].forEach((t) => {
+      cy.get('footer').contains(new RegExp(t, 'i')).should('exist');
+    });
+  });
+
+  it('footer shows “Seko mums” block if present', () => {
+    cy.get('footer').contains(/Seko mums/i).should('exist');
+  });
+
+  it('footer contains funding/program messages', () => {
+    cy.get('footer').contains(/Nacionālais attīstības plāns/i).should('exist');
+  });
 });
 
 
