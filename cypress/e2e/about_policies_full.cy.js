@@ -113,6 +113,19 @@ describe('About/Policies consolidated', () => {
   it('footer contains funding/program messages', () => {
     cy.get('footer').contains(/Nacionālais attīstības plāns/i).should('exist');
   });
+
+  it('contacts and sitemap are reachable from footer', () => {
+    cy.get('footer').contains('a', /Kontakti/i).click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+    cy.get('footer').contains('a', /lapas karti/i).click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('cookie settings link exists in footer', () => {
+    cy.get('footer').contains(/sīkdatņu iestatīj/u).should('exist');
+  });
 });
 
 
