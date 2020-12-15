@@ -47,6 +47,39 @@ describe('Security: consolidated', () => {
     cy.acceptCookies();
     cy.get('a[target=\"_blank\"], a[rel*=\"noopener\"]').its('length').should('be.greaterThan', 0);
   });
+
+  it('unknown route returns 404 or redirects', () => {
+    cy.request({ url: '/definitely-not-a-page', failOnStatusCode: false }).then((resp) => {
+      expect([404, 301, 302]).to.include(resp.status);
+    });
+  });
+
+  it('security headers have reasonable values when present', () => {
+    cy.request({ url: '/', followRedirect: true }).then((resp) => {
+      const headers = resp.headers;
+      if (headers['x-content-type-options']) {
+        expect(headers['x-content-type-options']).to.match(/nosniff/i);
+      }
+      if (headers['referrer-policy']) {
+        expect(headers['referrer-policy']).to.match(/no-referrer|same-origin|strict-origin/i);
+      }
+      if (headers['x-frame-options']) {
+        expect(headers['x-frame-options']).to.match(/deny|sameorigin/i);
+      }
+    });
+  });
+
+  it('Strict-Transport-Security is long enough if present', () => {
+    cy.request({ url: '/', followRedirect: true }).then((resp) => {
+      const hsts = resp.headers['strict-transport-security'];
+      if (hsts) {
+        const maxAge = /max-age=(\\d+)/i.exec(hsts);
+        if (maxAge && maxAge[1]) {
+          expect(parseInt(maxAge[1], 10)).to.be.greaterThan(15552000); // >180 days
+        }
+      }
+    });
+  });
 });
 
 
