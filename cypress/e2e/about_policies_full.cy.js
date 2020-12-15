@@ -142,6 +142,10 @@ describe('About/Policies consolidated', () => {
       cy.contains(/portals@vdaa.gov.lv/i).should('exist');
     });
   });
+
+  it('footer has link to “Par portālu” page', () => {
+    cy.get('footer').contains('a', /Par portālu/i).should('exist');
+  });
 });
 
 
