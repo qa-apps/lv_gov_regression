@@ -126,6 +126,13 @@ describe('About/Policies consolidated', () => {
   it('cookie settings link exists in footer', () => {
     cy.get('footer').contains(/sīkdatņu iestatīj/u).should('exist');
   });
+
+  it('home exposes sitemap and attention section', () => {
+    cy.visit('/');
+    cy.acceptCookies();
+    cy.contains(/Pievērs uzmanību!/i).should('be.visible');
+    cy.contains('a', /lapas karti/i).should('exist');
+  });
 });
 
 
