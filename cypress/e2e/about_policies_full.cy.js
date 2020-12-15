@@ -24,10 +24,34 @@ const FOOTER_POLICY_LINKS = [
   'Piekļūstamības paziņojums'
 ];
 
+const ABOUT_EXTRA = [
+  'Noderīgi',
+  'Kontakti un saziņa',
+  'Aktualitātes',
+  'Statistika',
+  'E-pasta apstiprināšana',
+  'Atsauksme par Latvija.gov.lv',
+  'Latvija.gov.lv mobilā lietotne',
+  'Privātuma politika',
+  'Sīkdatņu politika',
+  'Personas datu apstrādes principi',
+  'Lietošanas noteikumi',
+  'Pilnvarošanas risinājuma lietošanas noteikumi',
+  'Portāla lietošanas noteikumi',
+  'Pakalpojuma \"Mani dati\" lietošanas noteikumi'
+];
+
 describe('About/Policies consolidated', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.acceptCookies();
+  });
+
+  it('About page lists expanded useful links', () => {
+    cy.contains('a', /Par portālu/i).click();
+    ABOUT_EXTRA.forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).should('exist');
+    });
   });
 
   it('About page contains core links', () => {
