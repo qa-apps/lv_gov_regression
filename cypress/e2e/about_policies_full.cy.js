@@ -58,6 +58,23 @@ describe('About/Policies consolidated', () => {
       cy.get('footer').contains('a', new RegExp(t, 'i')).should('exist');
     });
   });
+
+  it('each About link is navigable', () => {
+    cy.contains('a', /Par portālu/i).click();
+    ABOUT_LINKS.forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).should('be.visible').click({ force: true });
+      cy.location('pathname').should('match', /./);
+      cy.go('back');
+    });
+  });
+
+  it('all footer policy links navigate', () => {
+    FOOTER_POLICY_LINKS.forEach((t) => {
+      cy.get('footer').contains('a', new RegExp(t, 'i')).should('be.visible').click({ force: true });
+      cy.location('pathname').should('match', /./);
+      cy.go('back');
+    });
+  });
 });
 
 
