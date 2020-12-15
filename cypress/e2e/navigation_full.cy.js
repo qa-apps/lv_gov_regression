@@ -143,6 +143,10 @@ describe('Navigation: full coverage', () => {
   it('sign-in entry exists in header', () => {
     cy.contains('a', /Ienākt Mana Latvija.lv/i).should('be.visible');
   });
+
+  it('EN language switch visible', () => {
+    cy.contains('a,button', /^EN$/).should('be.visible');
+  });
 });
 
 
