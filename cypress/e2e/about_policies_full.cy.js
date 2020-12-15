@@ -133,6 +133,15 @@ describe('About/Policies consolidated', () => {
     cy.contains(/Pievērs uzmanību!/i).should('be.visible');
     cy.contains('a', /lapas karti/i).should('exist');
   });
+
+  it('footer shows organisation contact details', () => {
+    cy.get('footer').within(() => {
+      cy.contains(/Reģistrācijas numurs/i).should('exist');
+      cy.contains(/90001733697/).should('exist');
+      cy.contains(/67502757/).should('exist');
+      cy.contains(/portals@vdaa.gov.lv/i).should('exist');
+    });
+  });
 });
 
 
