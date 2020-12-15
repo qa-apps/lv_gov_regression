@@ -37,6 +37,38 @@ describe('SEO/Meta: consolidated suite', () => {
       cy.contains('h2', new RegExp(h, 'i')).should('be.visible');
     });
   });
+
+  it('canonical link present when declared', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<link[^>]+rel=[\"']canonical[\"']/i);
+    });
+  });
+
+  it('Open Graph and Twitter meta tags when available', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      expect(html).to.match(/<meta[^>]+property=[\"']og:/i);
+      expect(html).to.match(/<meta[^>]+name=[\"']twitter:/i);
+    });
+  });
+
+  it('noindex not present on main page', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).not.to.match(/noindex/i);
+    });
+  });
+
+  it('language attribute exists on <html>', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<html[^>]+lang=/i);
+    });
+  });
+
+  it('has title tag', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<title>.*?<\\/title>/i);
+    });
+  });
 });
 
 
