@@ -110,6 +110,35 @@ describe('Navigation: full coverage', () => {
     cy.location('pathname').should('match', /./);
     cy.go('back');
   });
+
+  it('services dropdown entries remain visible on hover', () => {
+    cy.contains('a', /Pakalpojumi/i).realHover();
+    SERVICES_SUBSETS.forEach((label) => {
+      cy.contains('a, [role=\"menuitem\"]', new RegExp(label, 'i')).should('be.visible');
+    });
+  });
+
+  it('what-to-do dropdown entries remain visible on hover', () => {
+    cy.contains('a', /Ko darīt/i).realHover();
+    WHAT_TO_DO_SETS.forEach((label) => {
+      cy.contains('a, [role=\"menuitem\"]', new RegExp(label, 'i')).should('be.visible');
+    });
+  });
+
+  it('header contains a reasonable number of links', () => {
+    cy.get('header, [role=\"banner\"]').first().within(() => {
+      cy.get('a').its('length').should('be.greaterThan', 3);
+    });
+  });
+
+  it('footer contains navigation and policy links', () => {
+    cy.get('footer').within(() => {
+      cy.get('a').its('length').should('be.greaterThan', 5);
+      ['Privātuma', 'Sīkdatņu', 'Lietošanas'].forEach((word) => {
+        cy.contains('a', new RegExp(word, 'i')).should('exist');
+      });
+    });
+  });
 });
 
 
