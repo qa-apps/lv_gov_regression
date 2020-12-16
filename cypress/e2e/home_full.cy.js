@@ -141,6 +141,10 @@ describe('Home: consolidated smoke', () => {
   it('header E-adrese link is present', () => {
     cy.get('nav').contains('a', /^E-adrese$/).should('be.visible');
   });
+
+  it('header Par portālu link is present', () => {
+    cy.get('nav').contains('a', /Par portālu/i).should('be.visible');
+  });
 });
 
 
