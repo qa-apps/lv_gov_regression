@@ -137,6 +137,10 @@ describe('Home: consolidated smoke', () => {
   it('CTA count is reasonable', () => {
     cy.get('a').its('length').should('be.greaterThan', 10);
   });
+
+  it('header E-adrese link is present', () => {
+    cy.get('nav').contains('a', /^E-adrese$/).should('be.visible');
+  });
 });
 
 
