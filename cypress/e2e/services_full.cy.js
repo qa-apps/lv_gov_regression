@@ -99,6 +99,21 @@ describe('Services: consolidated', () => {
       });
     });
   });
+
+  it('“Ko darīt, ja..?” page lists common situations', () => {
+    cy.contains('a', /Ko darīt, ja/i).click();
+    const SITUATIONS = [
+      'Bezdarbnieku pabalsts',
+      'Gada ienākumu deklarācija',
+      'Bērna gaidīšana',
+      'Rīcība saslimšanas',
+      'Laulības noslēgšana',
+      'Privātmājas būvniecība',
+      'Invaliditātes apliecība',
+      'Dabas un vides aizsardzība'
+    ];
+    SITUATIONS.forEach((s) => cy.contains('a', new RegExp(s, 'i')).should('exist'));
+  });
 });
 
 
