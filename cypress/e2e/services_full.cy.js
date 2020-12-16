@@ -59,6 +59,21 @@ describe('Services: consolidated', () => {
     items.forEach((t) => cy.contains('a, button', new RegExp(t, 'i')).should('exist'));
   });
 
+  it('more specific services are present', () => {
+    const MORE_ITEMS = [
+      'Pieteikšanās uzturlīdzekļu saņemšanai',
+      'Dzīvesvietas deklarēšana vai norādīšana',
+      'Administratīvo sodu pārbaude',
+      'Parakstu vākšana par pašvaldības referendumu',
+      'Nekustamā īpašuma nodokļa nomaksa',
+      'Iesniegums slimības pabalsta piešķiršanai (B lapa)',
+      'Pensijas pārvaldītāja izvēle (2.līmenis)',
+      'Pakalpojuma \"Mani dati\"',
+      'Pilnvarošanas risinājuma lietošanas noteikumi'
+    ];
+    MORE_ITEMS.forEach((t) => cy.contains('a, button', new RegExp(t, 'i')).should('exist'));
+  });
+
   it('navigate to first ten service links and back (smoke)', () => {
     cy.get('a').filter(':visible').then(($links) => {
       const firstTen = Array.from($links).slice(0, 10);
@@ -71,6 +86,16 @@ describe('Services: consolidated', () => {
           cy.go('back');
           cy.contains('a', /Pakalpojumi/i).should('be.visible');
         }
+      });
+    });
+  });
+
+  it('smoke: iterate over visible service buttons/links (up to 15)', () => {
+    cy.get('a, button').filter(':visible').then(($els) => {
+      const slice = Array.from($els).slice(0, 15);
+      slice.forEach((el) => {
+        const text = Cypress.$(el).text().trim();
+        expect(text.length).to.be.greaterThan(0);
       });
     });
   });
