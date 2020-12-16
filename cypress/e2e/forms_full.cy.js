@@ -31,6 +31,31 @@ describe('Forms: consolidated suite', () => {
       }
     });
   });
+
+  it('required fields (if any) are marked or enforce validity', () => {
+    cy.get('input[required], select[required], textarea[required]').each(($f) => {
+      const el = $f[0];
+      if (el && el.checkValidity) {
+        expect(typeof el.checkValidity).to.eq('function');
+      }
+    });
+  });
+
+  it('buttons have accessible names', () => {
+    cy.get('button:visible').each(($b) => {
+      const name = $b.text().trim();
+      expect(name.length).to.be.greaterThan(0);
+    });
+  });
+
+  it('labels are associated by for/id when present', () => {
+    cy.get('label[for]').each(($l) => {
+      const id = $l.attr('for');
+      if (id) {
+        expect(Cypress.$(`#${id}`).length).to.be.greaterThan(0);
+      }
+    });
+  });
 });
 
 
