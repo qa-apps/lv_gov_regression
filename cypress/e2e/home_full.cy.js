@@ -93,6 +93,39 @@ describe('Home: consolidated smoke', () => {
       cy.contains(/6750/).should('exist');
     });
   });
+
+  it('home highlights “Pievērs uzmanību!” and useful footer links', () => {
+    cy.contains(/Pievērs uzmanību!/i).should('be.visible');
+    ['Noderīgi', 'Apskatīt lapas karti', 'Kontakti un saziņa', 'Par portālu'].forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).should('exist');
+    });
+  });
+
+  it('footer funding and program messages visible', () => {
+    cy.get('footer').within(() => {
+      cy.contains(/Nacionālais attīstības plāns/i).should('exist');
+      cy.contains(/Eiropas Savienības/i).should('exist');
+      cy.contains(/Tava Eiropa/i).should('exist');
+    });
+  });
+
+  it('search overlay shows top queries hint text', () => {
+    cy.contains('button', /Mekl/).click();
+    cy.contains(/Top meklētākie pakalpojumi/i).should('be.visible');
+  });
+
+  it('search overlay lists popular items text snippets', () => {
+    cy.contains('button', /Mekl/).click();
+    const items = [
+      'Saņemtās Darbnespējas lapas',
+      'administratīvā pārkāpuma',
+      'Parakstu vākšana',
+      'Nekustamā īpašuma nodokļa apmaksa'
+    ];
+    items.forEach((t) => {
+      cy.contains(new RegExp(t, 'i')).should('exist');
+    });
+  });
 });
 
 
