@@ -126,6 +126,17 @@ describe('Home: consolidated smoke', () => {
       cy.contains(new RegExp(t, 'i')).should('exist');
     });
   });
+
+  it('Mana Latvija.lv block visible with tiles', () => {
+    cy.contains('h2', /Mana Latvija.lv/i).should('be.visible');
+    ['E-adreses pastkastīte', 'Sākt lietot e-adresi'].forEach((t) => {
+      cy.contains('a', new RegExp(t, 'i')).should('exist');
+    });
+  });
+
+  it('CTA count is reasonable', () => {
+    cy.get('a').its('length').should('be.greaterThan', 10);
+  });
 });
 
 
