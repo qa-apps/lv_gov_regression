@@ -114,6 +114,27 @@ describe('Services: consolidated', () => {
     ];
     SITUATIONS.forEach((s) => cy.contains('a', new RegExp(s, 'i')).should('exist'));
   });
+
+  it('services page exposes a substantial amount of links', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.get('a:visible').its('length').should('be.greaterThan', 10);
+  });
+
+  it('navigate next batch of service links (up to 8)', () => {
+    cy.contains('a', /Pakalpojumi/i).click();
+    cy.get('a:visible').then(($links) => {
+      const next = Array.from($links).slice(10, 18);
+      next.forEach((node) => {
+        const $a = Cypress.$(node);
+        const href = $a.attr('href');
+        if (href && href !== '#') {
+          cy.wrap($a).click({ force: true });
+          cy.location('pathname').should('match', /./);
+          cy.go('back');
+        }
+      });
+    });
+  });
 });
 
 
