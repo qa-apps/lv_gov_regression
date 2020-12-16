@@ -80,6 +80,21 @@ describe('Security: consolidated', () => {
       }
     });
   });
+
+  it('homepage markup does not include insecure http links', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).not.to.match(/href=\\\"http:\\/\\//i);
+    });
+  });
+
+  it('CSP header has sane directives if present', () => {
+    cy.request('/').then((resp) => {
+      const csp = resp.headers['content-security-policy'];
+      if (csp) {
+        expect(csp).to.match(/default-src|script-src|style-src/i);
+      }
+    });
+  });
 });
 
 
