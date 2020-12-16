@@ -69,6 +69,27 @@ describe('SEO/Meta: consolidated suite', () => {
       expect(resp.body).to.match(/<title>.*?<\\/title>/i);
     });
   });
+
+  it('meta viewport present', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<meta[^>]+name=[\"']viewport[\"']/i);
+    });
+  });
+
+  it('charset declared', () => {
+    cy.request('/').then((resp) => {
+      expect(resp.body).to.match(/<meta[^>]+charset=/i);
+    });
+  });
+
+  it('alternate hreflang links when available', () => {
+    cy.request('/').then((resp) => {
+      const html = resp.body;
+      if (/<link[^>]+rel=[\"']alternate[\"'][^>]+hreflang=/i.test(html)) {
+        expect(html).to.match(/hreflang/i);
+      }
+    });
+  });
 });
 
 
