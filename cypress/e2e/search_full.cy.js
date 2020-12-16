@@ -58,6 +58,23 @@ describe('Search: consolidated suite', () => {
     cy.location('pathname').should('match', /./);
     cy.go('back');
   });
+
+  it('handles multiple queries in sequence without refresh', () => {
+    ['pensija', 'deklarācija', 'e-adrese', 'veselība'].forEach((q) => {
+      home.search(q);
+      cy.contains('a, h3, h2', new RegExp(q.slice(0, 3), 'i')).should('be.visible');
+    });
+  });
+
+  it('ignores excessive whitespace', () => {
+    home.search('   pabalsts   ');
+    cy.contains(/pabalst/i).should('be.visible');
+  });
+
+  it('long string does not break layout', () => {
+    home.search('x'.repeat(200));
+    cy.contains(/Lai uzsāktu meklēšanu|rezult/i).should('exist');
+  });
 });
 
 
