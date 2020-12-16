@@ -30,6 +30,22 @@ describe('Responsive: consolidated suite', () => {
     cy.contains('button, [aria-label=\"menu\"]', /menu|burger|navigation/i).should('exist').click({ force: true });
     cy.get('nav a').should('have.length.greaterThan', 3);
   });
+
+  it('tablet viewport still shows navigation', () => {
+    cy.viewport(768, 1024);
+    cy.visit('/');
+    cy.acceptCookies();
+    cy.get('nav a').its('length').should('be.greaterThan', 3);
+  });
+
+  it('desktop viewport renders hero and blocks', () => {
+    cy.viewport(1366, 850);
+    cy.visit('/');
+    cy.acceptCookies();
+    ['Visi pakalpojumi', 'Ko darīt, ja'].forEach((t) => {
+      cy.contains('h2', new RegExp(t, 'i')).should('be.visible');
+    });
+  });
 });
 
 
