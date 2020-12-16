@@ -128,6 +128,24 @@ describe('Security: consolidated', () => {
       cy.request({ url: p, method: 'HEAD', failOnStatusCode: false }).its('status').should('be.oneOf', [200, 301, 302, 405]);
     });
   });
+
+  it('referrer-policy avoids unsafe-url if present', () => {
+    cy.request('/').then((resp) => {
+      const rp = resp.headers['referrer-policy'];
+      if (rp) {
+        expect(rp).not.to.match(/unsafe-url/i);
+      }
+    });
+  });
+
+  it('x-download-options header noted if present', () => {
+    cy.request('/').then((resp) => {
+      const xdo = resp.headers['x-download-options'];
+      if (xdo) {
+        expect(xdo.length).to.be.greaterThan(0);
+      }
+    });
+  });
 });
 
 
