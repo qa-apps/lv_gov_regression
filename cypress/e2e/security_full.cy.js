@@ -95,6 +95,39 @@ describe('Security: consolidated', () => {
       }
     });
   });
+
+  it('Permissions-Policy or Feature-Policy header noted if present', () => {
+    cy.request('/').then((resp) => {
+      const pp = resp.headers['permissions-policy'] || resp.headers['feature-policy'];
+      if (pp) {
+        expect(pp.length).to.be.greaterThan(0);
+      }
+    });
+  });
+
+  it('Set-Cookie flags include Secure/SameSite when cookies set', () => {
+    cy.request('/').then((resp) => {
+      const setCookie = resp.headers['set-cookie'];
+      if (setCookie && setCookie.length) {
+        const serialized = Array.isArray(setCookie) ? setCookie.join('; ') : String(setCookie);
+        expect(serialized).to.match(/Secure/i);
+        expect(serialized).to.match(/SameSite/i);
+      }
+    });
+  });
+
+  it('protocol is HTTPS on main visit', () => {
+    cy.visit('/');
+    cy.location('protocol').should('eq', 'https:');
+  });
+
+  it('repeated GET/HEAD to home are successful', () => {
+    const paths = ['/', '/'];
+    paths.forEach((p) => {
+      cy.request({ url: p, method: 'GET', followRedirect: true }).its('status').should('be.oneOf', [200, 301, 302]);
+      cy.request({ url: p, method: 'HEAD', failOnStatusCode: false }).its('status').should('be.oneOf', [200, 301, 302, 405]);
+    });
+  });
 });
 
 
