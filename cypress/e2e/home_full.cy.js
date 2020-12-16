@@ -62,6 +62,24 @@ describe('Home: consolidated smoke', () => {
   it('basic accessibility check on main content', () => {
     cy.checkA11yBlock('main');
   });
+
+  it('Top services section shows multiple links', () => {
+    cy.contains('h2', /Visi pakalpojumi/i).parentsUntil('main').parent().within(() => {
+      cy.get('a').its('length').should('be.greaterThan', 5);
+    });
+  });
+
+  it('Follow “Visi pakalpojumi” and return', () => {
+    cy.contains('a', /Visi pakalpojumi/i).click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
+
+  it('Follow “Visas dzīves situācijas” and return', () => {
+    cy.contains('a', /Visas dzīves situācijas/i).click({ force: true });
+    cy.location('pathname').should('match', /./);
+    cy.go('back');
+  });
 });
 
 
