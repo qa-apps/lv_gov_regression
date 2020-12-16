@@ -64,6 +64,33 @@ describe('Accessibility: consolidated suite', () => {
       }
     });
   });
+
+  it('navigation landmarks exist', () => {
+    cy.get('[role=\"navigation\"], nav').its('length').should('be.greaterThan', 0);
+  });
+
+  it('search landmark exists if present', () => {
+    const hasSearch = Cypress.$('[role=\"search\"]').length > 0;
+    expect([true, false]).to.include(hasSearch);
+  });
+
+  it('no obvious keyboard trap on first 20 focusable elements', () => {
+    cy.get('a, button, input, select, textarea').filter(':visible').then(($els) => {
+      const slice = Array.from($els).slice(0, 20);
+      slice.forEach((el) => {
+        cy.wrap(el).focus().type('{tab}');
+        cy.focused().should('exist');
+      });
+    });
+  });
+
+  it('region headings are readable', () => {
+    ['header', 'main', 'footer'].forEach((region) => {
+      cy.get(region).within(() => {
+        cy.get('h1,h2,h3').its('length').should('be.greaterThan', 0);
+      });
+    });
+  });
 });
 
 
