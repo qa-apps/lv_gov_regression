@@ -80,6 +80,19 @@ describe('Home: consolidated smoke', () => {
     cy.location('pathname').should('match', /./);
     cy.go('back');
   });
+
+  it('header contains expected utility links', () => {
+    ['EN', 'Ienākt Mana Latvija.lv'].forEach((t) => {
+      cy.contains('a,button', new RegExp(`^${t}$`, 'i')).should('exist');
+    });
+  });
+
+  it('footer displays contact email and phone', () => {
+    cy.get('footer').within(() => {
+      cy.contains(/portals@vdaa.gov.lv/i).should('exist');
+      cy.contains(/6750/).should('exist');
+    });
+  });
 });
 
 
