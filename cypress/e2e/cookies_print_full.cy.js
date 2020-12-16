@@ -31,6 +31,25 @@ describe('Cookies + Print CSS: consolidated', () => {
       expect(resp.body).to.match(/media=\"print\"|@media\\s+print/i);
     });
   });
+
+  it('cookie manage link exists', () => {
+    cy.visit('/');
+    cy.acceptCookies();
+    cy.contains(/sīkdatņu iestatīj/u).should('exist');
+  });
+
+  it('cookie banner exposes manage option when shown', () => {
+    cy.visit('/');
+    cy.contains('button', /Pārvaldīt/i, { timeout: 10000 }).should('exist');
+  });
+
+  it('footer contains contacts and about links alongside policies', () => {
+    cy.visit('/');
+    cy.acceptCookies();
+    ['Kontakti', 'Par portālu'].forEach((t) => {
+      cy.get('footer').contains('a', new RegExp(t, 'i')).should('exist');
+    });
+  });
 });
 
 
